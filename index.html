@@ -1,55 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Game Studio Generator</title>
-<style>
-body { font-family: Arial, sans-serif; background: #0f172a; color: #f8fafc; max-width: 600px; margin: 40px auto; padding: 20px; border-radius: 8px; }
-h2 { color: #38bdf8; text-align: center; }
-label { display: block; margin-top: 15px; font-weight: bold; }
-input, textarea { width: 100%; padding: 10px; margin-top: 5px; background: #1e293b; border: 1px solid #475569; color: white; border-radius: 4px; box-sizing: border-box; }
-button { width: 100%; margin-top: 25px; background: #0ea5e9; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
-button:hover { background: #0284c7; }
-#output { margin-top: 20px; background: #1e293b; padding: 15px; border-radius: 4px; white-space: pre-wrap; display: none; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Browser Game Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0f172a; color: #f8fafc; max-width: 650px; margin: 30px auto; padding: 20px; border-radius: 8px; }
+        h2 { color: #38bdf8; text-align: center; }
+        label { display: block; margin-top: 12px; font-weight: bold; font-size: 14px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; background: #1e293b; border: 1px solid #475569; color: white; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; margin-top: 20px; background: #0ea5e9; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0284c7; }
+        #output { margin-top: 20px; background: #1e293b; padding: 15px; border-radius: 4px; white-space: pre-wrap; display: none; font-family: monospace; font-size: 13px; max-height: 250px; overflow-y: auto; }
+        #game-preview { margin-top: 20px; width: 100%; height: 300px; background: #000; border: 2px solid #38bdf8; display: none; }
+    </style>
 </head>
 <body>
-<h2>AI Game Studio Generator</h2>
-<p style="text-align: center; color: #94a3b8;">Answer the questions below to design and package your game instantly.</p>
-<label>1. Game Title & Elevator Pitch:</label>
-<input type="text" id="pitch" placeholder="e.g., Neon Jumper: Avoid red spikes and survive!">
-<label>2. 2D Sub-Genre:</label>
-<input type="text" id="genre" placeholder="e.g., Arcade Score-Chaser / Platformer">
-<label>3. Visual Style & Aesthetics:</label>
-<input type="text" id="style" placeholder="e.g., Pixel Art / Minimalist Neon">
-<label>4. Player Controls & Movement:</label>
-<input type="text" id="controls" placeholder="e.g., Left and right arrow keys to dodge">
-<label>5. Win / Lose Conditions:</label>
-<input type="text" id="rules" placeholder="e.g., Lose on single hit, score increases by time survived">
-<button onclick="generateGame()">Generate & Package Game</button>
-<div id="output"></div>
-<script>
-function generateGame() {
-const pitch = document.getElementById('pitch').value;
-const genre = document.getElementById('genre').value;
-const style = document.getElementById('style').value;
-const controls = document.getElementById('controls').value;
-const rules = document.getElementById('rules').value;
-if(!pitch || !genre) {
-alert("Please fill out at least the title and genre!");
-return;
-}
-const outputDiv = document.getElementById('output');
-outputDiv.style.display = 'block';
-outputDiv.innerHTML = <strong>Status: Processing AI Architecture...</strong>\n\n +
-- Concept compiled: "${pitch}"\n +
-- Layout configured for: ${genre} (${style})\n +
-- Binding logic: ${controls}\n +
-- Applying rules: ${rules}\n\n +
-<strong>Success! Game script compiled securely via local environment bridge.</strong>\n\n +
-<a href="[https://itch.io](https://itch.io)" target="_blank" style="color: #38bdf8; font-weight: bold;">Click here to open Itch.io Dashboard to set your price and publish instantly!</a>;
-}
-</script>
+
+    <h2>AI Browser Game Generator</h2>
+    <p style="text-align: center; color: #94a3b8; font-size: 14px;">Create and test real playable web games instantly.</p>
+
+    <label>Gemini API Key (Free from Google AI Studio):</label>
+    <input type="password" id="apikey" placeholder="Enter your free API key here">
+
+    <label>Game Title & Elevator Pitch:</label>
+    <input type="text" id="pitch" placeholder="e.g., Neon Jumper: Dodge red blocks!">
+
+    <label>Player Controls & Rules:</label>
+    <input type="text" id="controls" placeholder="e.g., Use arrow keys to move, avoid obstacles">
+
+    <button onclick="generateRealGame()">Generate & Run Game</button>
+
+    <div id="output">Status: Waiting for prompt...</div>
+    <iframe id="game-preview"></iframe>
+
+    <script>
+        async function generateRealGame() {
+            const apiKey = document.getElementById('apikey').value;
+            const pitch = document.getElementById('pitch').value;
+            const controls = document.getElementById('controls').value;
+            const outputDiv = document.getElementById('output');
+            const previewFrame = document.getElementById('game-preview');
+
+            if (!apiKey || !pitch) {
+                alert("Please provide both your Gemini API key and a game pitch!");
+                return;
+            }
+
+            outputDiv.style.display = 'block';
+            outputDiv.innerText = "Connecting to Gemini AI to code your game...";
+
+            const prompt = `Create a complete, single-file HTML5 canvas game based on this concept: "${pitch}". Controls: ${controls}. Write ONLY valid HTML code including embedded CSS and JavaScript game loop. Do not include markdown formatting blocks like \`\`\`html, just return the raw HTML code starting with <!DOCTYPE html>.`;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                const data = await response.json();
+                const rawCode = data.candidates[0].content.parts[0].text;
+                const cleanCode = rawCode.replace(/```html/g, '').replace(/```/g, '').trim();
+
+                outputDiv.innerText = "Game code generated successfully! Loading preview...";
+                previewFrame.style.display = 'block';
+                
+                const frameDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+                frameDoc.open();
+                frameDoc.write(cleanCode);
+                frameDoc.close();
+
+            } catch (error) {
+                outputDiv.innerText = "Error generating game: " + error.message;
+            }
+        }
+    </script>
 </body>
 </html>
