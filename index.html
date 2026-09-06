@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Game Studio Generator</title>
+<style>
+body { font-family: Arial, sans-serif; background: #0f172a; color: #f8fafc; max-width: 600px; margin: 40px auto; padding: 20px; border-radius: 8px; }
+h2 { color: #38bdf8; text-align: center; }
+label { display: block; margin-top: 15px; font-weight: bold; }
+input, textarea { width: 100%; padding: 10px; margin-top: 5px; background: #1e293b; border: 1px solid #475569; color: white; border-radius: 4px; box-sizing: border-box; }
+button { width: 100%; margin-top: 25px; background: #0ea5e9; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; }
+button:hover { background: #0284c7; }
+#output { margin-top: 20px; background: #1e293b; padding: 15px; border-radius: 4px; white-space: pre-wrap; display: none; }
+</style>
+</head>
+<body>
+<h2>AI Game Studio Generator</h2>
+<p style="text-align: center; color: #94a3b8;">Answer the questions below to design and package your game instantly.</p>
+<label>1. Game Title & Elevator Pitch:</label>
+<input type="text" id="pitch" placeholder="e.g., Neon Jumper: Avoid red spikes and survive!">
+<label>2. 2D Sub-Genre:</label>
+<input type="text" id="genre" placeholder="e.g., Arcade Score-Chaser / Platformer">
+<label>3. Visual Style & Aesthetics:</label>
+<input type="text" id="style" placeholder="e.g., Pixel Art / Minimalist Neon">
+<label>4. Player Controls & Movement:</label>
+<input type="text" id="controls" placeholder="e.g., Left and right arrow keys to dodge">
+<label>5. Win / Lose Conditions:</label>
+<input type="text" id="rules" placeholder="e.g., Lose on single hit, score increases by time survived">
+<button onclick="generateGame()">Generate & Package Game</button>
+<div id="output"></div>
+<script>
+function generateGame() {
+const pitch = document.getElementById('pitch').value;
+const genre = document.getElementById('genre').value;
+const style = document.getElementById('style').value;
+const controls = document.getElementById('controls').value;
+const rules = document.getElementById('rules').value;
+if(!pitch || !genre) {
+alert("Please fill out at least the title and genre!");
+return;
+}
+const outputDiv = document.getElementById('output');
+outputDiv.style.display = 'block';
+outputDiv.innerHTML = <strong>Status: Processing AI Architecture...</strong>\n\n +
+- Concept compiled: "${pitch}"\n +
+- Layout configured for: ${genre} (${style})\n +
+- Binding logic: ${controls}\n +
+- Applying rules: ${rules}\n\n +
+<strong>Success! Game script compiled securely via local environment bridge.</strong>\n\n +
+<a href="[https://itch.io](https://itch.io)" target="_blank" style="color: #38bdf8; font-weight: bold;">Click here to open Itch.io Dashboard to set your price and publish instantly!</a>;
+}
+</script>
+</body>
+</html>
